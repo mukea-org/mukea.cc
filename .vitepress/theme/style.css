@@ -1,0 +1,5 @@
+@media (min-width: 960px) {
+  .VPContent.is-home .VPHome {
+    padding-top: 100px;
+  }
+}
