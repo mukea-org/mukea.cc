@@ -6,3 +6,5 @@ out
 *.log*
 tmp
 mukea.config.dev.ts
+.vscode
+.vitepress/cache
