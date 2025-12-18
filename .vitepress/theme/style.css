@@ -1,5 +1,17 @@
-@media (min-width: 960px) {
-  .VPContent.is-home .VPHome {
-    padding-top: 100px;
-  }
+.VPHome {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+
+.VPHome .VPFeatures {
+  padding-top: 0 !important;
+  flex-grow: 0;
+}
+
+.VPHome .vp-doc {
+  display: none;
 }
