@@ -7,7 +7,7 @@ export default defineConfig({
   themeConfig: {
     logo: '/mukea-logo.png', // 记得放图片
   },
-
+ base: '/', 
   // i18n 配置核心
   locales: {
     // 默认语言（中文） - 对应根目录 /
