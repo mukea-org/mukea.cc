@@ -1,4 +1,3 @@
-# .github/workflows/deploy.yml
 name: Deploy VitePress site to Pages
 
 on:
@@ -7,7 +6,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # ⚠️ 必须改为 write，否则无法推送到 gh-pages 分支
+  contents: write
   pages: write
   id-token: write
 
@@ -24,35 +24,42 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 1. 核心修改：安装 pnpm
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9  # 这里你可以指定大版本，比如 8 或 9
+          version: 9
 
-      # 2. 核心修改：设置 Node 并开启 pnpm 缓存
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm' # 告诉 GitHub 使用 pnpm 的缓存机制
+          cache: 'pnpm'
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # 3. 核心修改：使用 pnpm 安装依赖
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 4. 核心修改：使用 pnpm 构建
       - name: Build with VitePress
         run: pnpm docs:build
 
+      # --- 新增部分开始：推送到 gh-pages 分支供 Cloudflare 使用 ---
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .vitepress/dist  # 你构建的输出目录
+          force_orphan: true            # 每次都强制覆盖，保持分支干净
+      # --- 新增部分结束 ---
+
+      # 继续保留原有的 GitHub Pages 上传步骤
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: .vitepress/dist
 
+  # GitHub Pages 的部署工作流保持不变
   deploy:
     environment:
       name: github-pages
