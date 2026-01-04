@@ -76,49 +76,19 @@ html:not(.dark) .VPHome .VPFeature {
   background-color: transparent !important;
 }
 
-.mukea-nav-transparent .VPNavBar:not(.screen-open) .divider-line {
-  background-color: transparent !important;
+/* .vitepress/theme/custom.css */
+
+/* 1) 非 home：去掉 VPNavBar 自身的阴影/边框 */
+.VPNavBar:not(.home) {
+  box-shadow: none !important;
+  border-bottom: none !important;
 }
 
-@media (min-width: 960px) {
-  .mukea-nav-transparent .VPNavBar:not(.home.top) .content-body {
-    background-color: transparent !important;
-  }
-}
-
-/* Keep top navbar layout consistent even when a sidebar exists (e.g. blog). */
-@media (min-width: 960px) {
-  .VPNavBar.has-sidebar .wrapper {
-    padding: 0 32px !important;
-  }
-
-  .VPNavBar.has-sidebar .container {
-    max-width: calc(var(--vp-layout-max-width) - 64px) !important;
-  }
-
-  .VPNavBar.has-sidebar .title {
-    position: static !important;
-    width: auto !important;
-    padding: 0 !important;
-  }
-
-  .VPNavBar.has-sidebar .content {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  .VPNavBar.has-sidebar .divider {
-    padding-left: 0 !important;
-  }
-
-  .VPNavBarTitle.has-sidebar .title {
-    border-bottom-color: transparent !important;
-  }
-}
-
-
-/* Download pages: remove doc padding so fixed layout doesn't create scroll */
-.VPDoc .vp-doc._download,
-.VPDoc .vp-doc._en_download {
-  padding: 0 !important;
+/* 2) 非 home：如果底部分隔线/阴影是通过内部 divider 或伪元素画出来的，也一并清掉 */
+.VPNavBar:not(.home)::after,
+.VPNavBar:not(.home) .divider,
+.VPNavBar:not(.home) .divider-line {
+  box-shadow: none !important;
+  border-bottom: none !important;
+  background: transparent !important;
 }
