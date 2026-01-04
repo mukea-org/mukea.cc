@@ -1,11 +1,15 @@
 import { defineConfig } from 'vitepress'
+import Icons from 'unplugin-icons/vite'
 
 export default defineConfig({
+  vite: {
+    plugins: [Icons({ compiler: 'vue3', autoInstall: false })]
+  },
   title: "Mukea",
   
   // 共享的主题配置
   themeConfig: {
-    logo: '/mukea-logo.png', // 记得放图片
+    logo: '/favicon.ico',
   },
  base: '/', 
   // i18n 配置核心
@@ -19,9 +23,19 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: '下载', link: '/download' },
-          { text: '关于', link: '/about' }
+          { text: '博客', link: '/blog', target: '_blank', rel: 'noreferrer' }
         ],
-        // 这里可以配置中文侧边栏等
+        sidebar: {
+          '/blog/': [
+            {
+              text: '博客',
+              items: [
+                { text: '为什么我们要做 Mukea', link: '/blog/' },
+                { text: 'Mukea形象', link: '/blog/mukea-image' }
+              ]
+            }
+          ]
+        }
       }
     },
     // 英文 - 对应 /en/ 目录
@@ -34,9 +48,19 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Download', link: '/en/download' },
-          { text: 'About', link: '/en/about' }
+          { text: 'Blog', link: '/en/blog', target: '_blank', rel: 'noreferrer' }
         ],
-        // 这里可以配置英文侧边栏等
+        sidebar: {
+          '/en/blog/': [
+            {
+              text: 'Blog',
+              items: [
+                { text: 'Why We’re Building Mukea', link: '/en/blog/' },
+                { text: 'Mukea Look', link: '/en/blog/mukea-image' }
+              ]
+            }
+          ]
+        }
       }
     }
   }

@@ -6,12 +6,119 @@
   box-sizing: border-box;
 }
 
+:root {
+  --mukea-primary: #b1dbeb;
+
+  /* VitePress brand overrides */
+  --vp-c-brand-1: var(--mukea-primary);
+  --vp-c-brand-2: var(--mukea-primary);
+  --vp-c-brand-3: var(--mukea-primary);
+  --vp-c-brand-soft: color-mix(in oklab, var(--mukea-primary) 24%, transparent);
+
+  /* Brand button should stay readable on light primary */
+  --vp-button-brand-text: #0f172a;
+  --vp-button-brand-hover-text: #0f172a;
+  --vp-button-brand-active-text: #0f172a;
+  --vp-button-brand-bg: var(--mukea-primary);
+  --vp-button-brand-hover-bg: var(--mukea-primary);
+  --vp-button-brand-active-bg: var(--mukea-primary);
+
+  /* Keep hero name readable while still using primary elsewhere */
+  --vp-home-hero-name-color: #0f172a;
+  --vp-home-hero-image-background-image: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--mukea-primary) 65%, transparent),
+    transparent
+  );
+}
+
+.dark {
+  --vp-c-brand-1: var(--mukea-primary);
+  --vp-c-brand-2: var(--mukea-primary);
+  --vp-c-brand-3: var(--mukea-primary);
+  --vp-c-brand-soft: color-mix(in oklab, var(--mukea-primary) 18%, transparent);
+  --vp-button-brand-text: #0f172a;
+  --vp-button-brand-hover-text: #0f172a;
+  --vp-button-brand-active-text: #0f172a;
+  --vp-button-brand-bg: var(--mukea-primary);
+  --vp-button-brand-hover-bg: var(--mukea-primary);
+  --vp-button-brand-active-bg: var(--mukea-primary);
+  --vp-home-hero-name-color: #e5e7eb;
+}
+
 
 .VPHome .VPFeatures {
   padding-top: 0 !important;
   flex-grow: 0;
 }
 
+html:not(.dark) .VPHome .VPFeature {
+  background-color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
 .VPHome .vp-doc {
   display: none;
+}
+
+.VPDoc .aside-curtain {
+  background: none !important;
+}
+
+/* Nav logo: no background fill */
+.VPNavBarTitle .logo {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Download page: transparent navbar */
+.mukea-nav-transparent .VPNavBar:not(.screen-open) {
+  background-color: transparent !important;
+}
+
+.mukea-nav-transparent .VPNavBar:not(.screen-open) .divider-line {
+  background-color: transparent !important;
+}
+
+@media (min-width: 960px) {
+  .mukea-nav-transparent .VPNavBar:not(.home.top) .content-body {
+    background-color: transparent !important;
+  }
+}
+
+/* Keep top navbar layout consistent even when a sidebar exists (e.g. blog). */
+@media (min-width: 960px) {
+  .VPNavBar.has-sidebar .wrapper {
+    padding: 0 32px !important;
+  }
+
+  .VPNavBar.has-sidebar .container {
+    max-width: calc(var(--vp-layout-max-width) - 64px) !important;
+  }
+
+  .VPNavBar.has-sidebar .title {
+    position: static !important;
+    width: auto !important;
+    padding: 0 !important;
+  }
+
+  .VPNavBar.has-sidebar .content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .VPNavBar.has-sidebar .divider {
+    padding-left: 0 !important;
+  }
+
+  .VPNavBarTitle.has-sidebar .title {
+    border-bottom-color: transparent !important;
+  }
+}
+
+
+/* Download pages: remove doc padding so fixed layout doesn't create scroll */
+.VPDoc .vp-doc._download,
+.VPDoc .vp-doc._en_download {
+  padding: 0 !important;
 }

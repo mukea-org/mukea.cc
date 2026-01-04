@@ -14,7 +14,9 @@ hero:
       link: /download
     - theme: alt
       text: 听听我们的故事
-      link: /story
+      link: /blog
+      target: _blank
+      rel: noreferrer
       
 features:
   - title: ✨ 无声的默契

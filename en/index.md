@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: "Mukea.cc"
+  name: "Mukea"
   text: "Silence, yet I Understand."
   tagline: "Your adorable, proactive desktop companion."
   image:
@@ -14,7 +14,9 @@ hero:
       link: /en/download
     - theme: alt
       text: Read Our Story
-      link: /en/story
+      link: /en/blog
+      target: _blank
+      rel: noreferrer
 
 features:
   - title: ✨ Silent Intuition

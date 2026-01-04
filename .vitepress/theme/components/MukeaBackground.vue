@@ -1,21 +1,49 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { useData, useRoute } from 'vitepress'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const canvasRef = ref(null)
 let animationId = null
 
+const { isDark } = useData()
+const route = useRoute()
+const isEnabled = computed(() => {
+  const raw = route.path || ''
+  const path = raw.replace(/\.html$/, '')
+  return (
+    path === '/' ||
+    path === '/en/' ||
+    path === '/download' ||
+    path === '/download/' ||
+    path === '/en/download' ||
+    path === '/en/download/'
+  )
+})
+
+const shouldRender = computed(() => isEnabled.value && !isDark.value)
+
+const isDownloadPage = computed(() => {
+  const raw = route.path || ''
+  const path = raw.replace(/\.html$/, '')
+  return path === '/download' || path === '/download/' || path === '/en/download' || path === '/en/download/'
+})
+
 // 配置：颜色和运动速度
 const colors = [
-  { r: 255, g: 60, b: 137 }, // 粉色 #ff3c89
-  { r: 255, g: 155, b: 94 }, // 橙色 #ff9b5e
-  { r: 65, g: 88, b: 208 }   // 蓝紫 #4158D0
+  { r: 177, g: 219, b: 235 }, // #B1DBEB
+  { r: 191, g: 217, b: 233 }, // #BFD9E9
+  { r: 137, g: 178, b: 205 } // #89B2CD
 ]
 
+let stop = () => {}
+
 onMounted(() => {
-  const canvas = canvasRef.value
-  const ctx = canvas.getContext('2d')
+  let canvas = null
+  let ctx = null
   let width, height
   let time = 0
+  let particles = []
+  let running = false
 
   // 粒子（光斑）类
   class Particle {
@@ -44,9 +72,10 @@ onMounted(() => {
         this.x, this.y, this.radius
       )
       
+      const alpha = 0.4
       const c = colors[this.index % colors.length]
       // 核心：颜色透明度渐变
-      gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, 0.4)`)
+      gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${alpha})`)
       gradient.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`)
 
       ctx.globalCompositeOperation = 'screen' // 混合模式：滤色（让重叠部分变亮）
@@ -56,8 +85,6 @@ onMounted(() => {
       ctx.fill()
     }
   }
-
-  let particles = []
 
   const resize = () => {
     width = window.innerWidth
@@ -83,30 +110,65 @@ onMounted(() => {
     animationId = requestAnimationFrame(animate)
   }
 
-  window.addEventListener('resize', resize)
-  resize()
-  animate()
+  const start = async () => {
+    if (running) return
+    await nextTick()
+    canvas = canvasRef.value
+    if (!canvas) return
+    ctx = canvas.getContext('2d')
+    if (!ctx) return
+    running = true
+    window.addEventListener('resize', resize)
+    resize()
+    animate()
+  }
+
+  stop = () => {
+    if (!running) return
+    running = false
+    window.removeEventListener('resize', resize)
+    cancelAnimationFrame(animationId)
+    animationId = null
+  }
+
+  watch(
+    shouldRender,
+    (value) => {
+      if (value) start()
+      else stop()
+    },
+    { immediate: true }
+  )
+
+  watch(
+    isDownloadPage,
+    (value) => {
+      if (typeof document === 'undefined') return
+      document.documentElement.classList.toggle('mukea-nav-transparent', value)
+    },
+    { immediate: true }
+  )
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', resize)
-  cancelAnimationFrame(animationId)
+  stop()
 })
 </script>
 
 <template>
-  <canvas ref="canvasRef" class="mukea-canvas-bg"></canvas>
+  <canvas v-if="shouldRender" ref="canvasRef" class="mukea-bg-canvas"></canvas>
 </template>
 
 <style scoped>
-.mukea-canvas-bg {
+.mukea-bg-canvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -99; /* 放在最底层 */
-  pointer-events: none; /* 鼠标穿透 */
-  opacity: 0.6; /* 整体透明度调节 */
+  z-index: -99;
+  pointer-events: none;
+  opacity: 0.6; 
 }
+
 </style>

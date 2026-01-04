@@ -1,10 +1,16 @@
 {
   "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "unplugin-icons": "^22.5.0",
+    "unplugin-vue-components": "^30.0.0",
     "vitepress": "^1.6.4"
   },
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
+  },
+  "dependencies": {
+    "vue-sonner": "^2.0.9"
   }
 }
